@@ -3,7 +3,7 @@ import { StyleSheet } from 'react-native';
 const styles = StyleSheet.create({
     container: {
         flex: 1,
-        justifyContent: 'center', 
+        //justifyContent: 'center', 
         alignItems: 'center', 
         backgroundColor: '#FAFAFA',
         padding: 8, 
@@ -11,7 +11,10 @@ const styles = StyleSheet.create({
     },
     text: { 
         fontSize: 16, 
-    },
+    }, 
+    pesquisa: {
+        flexDirection: 'row',
+    }, 
 });
 
 export default styles;
