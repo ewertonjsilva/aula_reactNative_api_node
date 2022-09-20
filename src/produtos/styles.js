@@ -15,6 +15,10 @@ const styles = StyleSheet.create({
     pesquisa: {
         flexDirection: 'row',
     }, 
+    tinyLogo: {
+        width: 100,
+        height: 100,
+    }
 });
 
 export default styles;
