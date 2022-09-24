@@ -1,4 +1,5 @@
-import { StyleSheet } from 'react-native';
+import { StyleSheet, Dimensions } from 'react-native'; 
+import { RFPercentage } from "react-native-responsive-fontsize";
 
 const styles = StyleSheet.create({
     container: {
@@ -26,14 +27,19 @@ const styles = StyleSheet.create({
         justifyContent: 'center',         
     }, 
     itensPesquisa: {
-        flexDirection: 'row', 
-        justifyContent: 'center', 
-        width: '100%', 
-        flexWrap: 'wrap', 
+        //flexDirection: 'row', 
+        //justifyContent: 'center', 
+        //width: '100%', 
+        //flexWrap: 'wrap', 
+        //era usado para deixar os itens estáticos lado a lado
+    }, 
+    flat: {
+        flex: 1, 
+        marginBottom: Dimensions.get('window').height / 12, 
     }, 
     itemPesquisa: {
-        width: '32%', 
-        height: 150, 
+        width: (Dimensions.get('window').width / 3) - 10, 
+        height: Dimensions.get('window').height / 4,  
         margin: 2, 
         padding: 3, 
         borderWidth: 1, 
@@ -43,17 +49,18 @@ const styles = StyleSheet.create({
         borderRadius: 10, 
     }, 
     txtTituloProd: { 
-        fontSize: 16, 
+        //fontSize: 16, 
+        fontSize: RFPercentage(2.8),
         textAlign: 'center', 
         textAlignVertical: 'center', 
         fontWeight: 'bold', 
-        minHeight: '15%',
-        maxHeight: '30%',         
+        height: '30%'
     }, 
     img: {
         width: '90%',
         height: '48%', 
         margin: 3, 
+        borderRadius: 10, 
     },  
 });
 
