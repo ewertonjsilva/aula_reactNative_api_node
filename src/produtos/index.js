@@ -6,7 +6,7 @@ import { Text, View, TextInput, TouchableOpacity, SafeAreaView, FlatList } from 
 import { Picker } from '@react-native-picker/picker';
 // https://docs.expo.dev/guides/icons/
 // https://icons.expo.fyi/
-import { FontAwesome } from '@expo/vector-icons';
+import { FontAwesome } from '@expo/vector-icons'; 
 
 import img1 from '../../assets/imgTemp/lanche1.jpg';
 import img2 from '../../assets/imgTemp/lanche2.jpg';
