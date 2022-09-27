@@ -1,17 +1,26 @@
-import { Text, View, TouchableOpacity } from 'react-native';
+import { Text, View, TouchableOpacity, TextInput } from 'react-native';
+import { MaterialIcons } from '@expo/vector-icons';
 
 import styles from './styles';
 
 export default function Login({ navigation }) {
   return (
     <View style={styles.container}>
+      <View style={styles.logoContainer}>
+        <MaterialIcons name="fastfood" size={48} color="#7F0000" />
+        <Text style={styles.logoText}>BomBuguer</Text>
+      </View>
       <Text style={styles.text}>Login</Text> 
-      <TouchableOpacity onPress={() => navigation.navigate('Tab')}>
-        <Text>Acessar tela</Text>
+      <TextInput style={styles.input} placeholder= 'usuário'/>
+      <TextInput style={styles.input} placeholder= 'senha'/>
+      <TouchableOpacity style={styles.btnCadUsu} onPress={() => navigation.navigate('CadastroUsu')}>
+        <Text style={styles.txtCadUsu}>Cadastrar usuário</Text>
       </TouchableOpacity>
-      <TouchableOpacity onPress={() => navigation.navigate('CadastroUsu')}>
-        <Text>Cadastro de usuário</Text>
-      </TouchableOpacity>      
+      <TouchableOpacity style={styles.btnEntrar} onPress={() => navigation.navigate('Tab')}>
+        <MaterialIcons name="vpn-key" size={24} color="#FAFAFA" />
+        <Text style={styles.txtEntrar}>Entrar</Text>
+      </TouchableOpacity>
+            
     </View>
   );
 }
