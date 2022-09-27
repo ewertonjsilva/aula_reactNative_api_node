@@ -32,8 +32,8 @@ export default function RotasTab() {
                 options={{
                     //tabBarLabel: 'Profile', 
                     //tabBarShowLabel: false,
-                    tabBarIcon: ({ focused, color, size }) => {
-                        color = focused ? '#F05545' : '#fafafa';
+                    tabBarIcon: ({ focused }) => {
+                        let color = focused ? '#F05545' : '#fafafa';
                         return <MaterialIcons name="home" size={30} color={color} />;
                     },                     
                   }}

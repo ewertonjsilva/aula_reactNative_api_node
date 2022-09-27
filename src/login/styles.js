@@ -9,16 +9,6 @@ const styles = StyleSheet.create({
         padding: 8, 
         width: '100%',
     }, 
-    logoContainer: {
-        flexDirection: 'row', 
-        justifyContent: 'center', 
-        alignItems: 'center', 
-        marginVertical: 48,
-    }, 
-    logoText: {
-        fontSize: 48, 
-        color: '#7F0000'
-    }, 
     text: { 
         fontSize: 24, 
         color: '#7F0000'

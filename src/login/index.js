@@ -1,15 +1,14 @@
 import { Text, View, TouchableOpacity, TextInput } from 'react-native';
 import { MaterialIcons } from '@expo/vector-icons';
 
-import styles from './styles';
+import styles from './styles'; 
+
+import Logo from '../../assets/compartilhados/logo';
 
 export default function Login({ navigation }) {
   return (
     <View style={styles.container}>
-      <View style={styles.logoContainer}>
-        <MaterialIcons name="fastfood" size={48} color="#7F0000" />
-        <Text style={styles.logoText}>BomBuguer</Text>
-      </View>
+      <Logo />
       <Text style={styles.text}>Login</Text> 
       <TextInput style={styles.input} placeholder= 'usuário'/>
       <TextInput style={styles.input} placeholder= 'senha'/>
