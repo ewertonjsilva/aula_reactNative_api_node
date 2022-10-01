@@ -49,7 +49,7 @@ const styles = StyleSheet.create({
         color: '#FAFAFA', 
         fontWeight: 'bold', 
         paddingHorizontal: 32
-    }
+    }, 
 });
 
 export default styles;

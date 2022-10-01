@@ -5,7 +5,7 @@ const styles = StyleSheet.create({
         flexDirection: 'row', 
         justifyContent: 'center', 
         alignItems: 'center', 
-        marginVertical: 48,
+        marginVertical: 35,
     }, 
     logoText: {
         fontSize: 48, 

@@ -8,7 +8,8 @@ import Login from '../login';
 import Tab from '../routes/rotasTab'; 
 import CadastroUsu from '../cadCliente';
 import CadEndCli from '../enderecoCliente'; 
-import Carrinho from '../carrinho';
+import Carrinho from '../carrinho'; 
+import Produto from '../produto/produto';
 
 const Stack = createNativeStackNavigator();
 
@@ -25,7 +26,8 @@ export default function Rotas() {
                 <Stack.Screen name="Tab" component={Tab} />
                 <Stack.Screen name="CadastroUsu" component={CadastroUsu} />
                 <Stack.Screen name="CadEndCli" component={CadEndCli} />
-                <Stack.Screen name="Carrinho" component={Carrinho} />
+                <Stack.Screen name="Carrinho" component={Carrinho} /> 
+                <Stack.Screen name="Produto" component={Produto} />
             </Stack.Navigator>
             <StatusBar style="light" />
         </NavigationContainer>

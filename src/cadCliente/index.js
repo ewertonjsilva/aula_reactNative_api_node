@@ -7,17 +7,18 @@ import styles from './styles';
 import Logo from '../../assets/compartilhados/logo';
 
 const estados = [
-  {id : 0, tipo : 'SP'}, 
-  {id : 1, tipo : 'RJ'}, 
-  {id : 2, tipo : 'PR'}, 
-  {id : 3, tipo : 'SC'}
+  {id : 0, uf : 'UF'}, 
+  {id : 1, uf : 'RJ'}, 
+  {id : 2, uf : 'PR'}, 
+  {id : 3, uf : 'SP'}
 ];
 
 const cidades = [
-    {id : 0, tipo : 'Tupã'}, 
-    {id : 1, tipo : 'Parapuã'}, 
-    {id : 2, tipo : 'Marília'}, 
-    {id : 3, tipo : 'Paulicéia'}
+    {id : 0, nome : 'Cidade'}, 
+    {id : 1, nome : 'Tupã'}, 
+    {id : 2, nome : 'Parapuã'}, 
+    {id : 3, nome : 'Marília'}, 
+    {id : 4, nome : 'Paulicéia'}
   ];
 
 export default function Cliente({ navigation }) {
@@ -47,21 +48,48 @@ export default function Cliente({ navigation }) {
   );
 }
 
-function Cadastro({ mudaTela }) {
+function Cadastro({ mudaTela }) { 
+
+  const [ufSel, setUfSel] = useState([]);
+  const [cidSel, setCidSel] = useState([]);
+
   return(
     <View style={styles.container}>
-      <Text>Cadastro de usuário</Text>
-      <TextInput placeholder='Nome' />
-      <TextInput placeholder='E-mail' />
-      <TextInput placeholder='Senha' /> 
-      <TextInput placeholder='Celular' /> 
-      <TextInput placeholder='Logradouro' /> 
-      <TextInput placeholder='Número' /> 
-      <TextInput placeholder='Bairro' /> 
-      <TextInput placeholder='Complemento' /> 
-
-      <TouchableOpacity onPress={() => mudaTela(1)}>
-        <Text>Cadastrar</Text>        
+      <Text style={styles.text}>Cadastro de usuário</Text>
+      <TextInput placeholder='Nome' style={styles.input} />
+      <TextInput placeholder='E-mail' style={styles.input} />
+      <TextInput placeholder='Senha' style={styles.input} /> 
+      <TextInput placeholder='Celular' style={styles.input} /> 
+      <TextInput placeholder='Logradouro' style={styles.input} /> 
+      <TextInput placeholder='Número' style={styles.input} /> 
+      <TextInput placeholder='Bairro' style={styles.input} /> 
+      <TextInput placeholder='Complemento' style={styles.input} /> 
+        <View style={styles.containerPicker}>
+          <Picker
+              selectedValue={ufSel} 
+              onValueChange={(itemValue) => setUfSel(itemValue)} 
+              style={styles.pickerUf}
+            >
+            {
+              estados.map(uf => {
+                return <Picker.Item label={uf.uf} value={uf.id} key={uf.id} style={styles.txtLista} />
+              })
+            }          
+          </Picker>
+          <Picker
+              selectedValue={cidSel} 
+              onValueChange={(itemValue) => setCidSel(itemValue)} 
+              style={styles.pickerCid}
+            >
+            {
+              cidades.map(cid => {
+                return <Picker.Item label={cid.nome} value={cid.id} key={cid.id} style={styles.txtLista} />
+              })
+            }          
+          </Picker>
+        </View>        
+      <TouchableOpacity onPress={() => mudaTela(1)} style={styles.botao}>
+        <Text style={styles.txtBotao}>Cadastrar</Text>        
       </TouchableOpacity>
     </View>    
   )
@@ -70,9 +98,9 @@ function Cadastro({ mudaTela }) {
 function CadSucesso({ navigation }) {
   return(
     <View style={styles.container}>
-      <TouchableOpacity onPress={() => navigation.goBack()}>
-        <Text>Cadastro realizado com sucesso!</Text>
-        <Text>Ir para login</Text>
+      <Text style={styles.txtMensagem}>Cadastro realizado com sucesso!</Text>
+      <TouchableOpacity onPress={() => navigation.goBack()} style={styles.botao}>
+        <Text style={styles.txtBotao}>Voltar para o login</Text>        
       </TouchableOpacity>
     </View>    
   )
