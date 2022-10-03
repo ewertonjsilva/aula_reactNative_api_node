@@ -1,4 +1,5 @@
 import { Text, View, TouchableOpacity, TextInput } from 'react-native';
+// https://icons.expo.fyi/
 import { MaterialIcons } from '@expo/vector-icons';
 
 import styles from './styles'; 
