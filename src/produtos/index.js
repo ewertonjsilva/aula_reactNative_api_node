@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Text, View, TextInput, TouchableOpacity, SafeAreaView, FlatList } from 'react-native'; 
 // https://github.com/react-native-picker/picker 
 // depois como adm em um prompt
@@ -17,7 +17,8 @@ import img6 from '../../assets/imgTemp/suco2.jpg';
 
 import styles from './styles'; 
 
-import CardItem from './cardItem';
+import CardItem from './cardItem'; 
+import api from '../services/api'; 
 /*
   nome - imagem - valor
 */
@@ -25,7 +26,6 @@ import CardItem from './cardItem';
 export default function Produtos({ navigation }) { 
   const [tipoSel, setTipoSel] = useState([]);
 
-  //const [tipoProduto, setTipoProduto] = useState(['Tipo', 'Lanche', 'Porção', 'Suco']); 
   const [tipoProduto, setTipoProduto] = useState(
     [
       {id : 0, tipo : 'Tipo'}, 
@@ -36,24 +36,31 @@ export default function Produtos({ navigation }) {
   ); 
 
   // produtos
-  const [produtos, setProdutos] = useState(
-    [
-      {id: 0, nome: 'Lanche de Frango', img: img1, valor: 'R$ 15,00', descricao: 'Lanche maravilhoso'}, 
-      {id: 1, nome: 'Lanche de Peixe', img: img2, valor: 'R$ 25,00', descricao: 'Lanche maravilhoso'}, 
-      {id: 2, nome: 'Bolo', img: img3, valor: 'R$ 10,00', descricao: 'Lanche maravilhoso'}, 
-      {id: 3, nome: 'Fritas rústica da casa ao lado do vizinho', img: img4, valor: 'R$ 19,00', descricao: 'Lanche maravilhoso'}, 
-      {id: 4, nome: 'Suco de laranja', img: img5, valor: 'R$ 8,25', descricao: 'Lanche maravilhoso'}, 
-      {id: 5, nome: 'Suco verde', img: img6, valor: 'R$ 12,00', descricao: 'Lanche maravilhoso'}, 
-      {id: 6, nome: 'Suco', img: img6, valor: 'R$ 13,00', descricao: 'Lanche maravilhoso'}, 
-      {id: 7, nome: 'Suco', img: img6, valor: 'R$ 14,00', descricao: 'Lanche maravilhoso'}, 
-      {id: 8, nome: 'Suco', img: img6, valor: 'R$ 15,00', descricao: 'Lanche maravilhoso'}, 
-      {id: 9, nome: 'Suco', img: img6, valor: 'R$ 16,00', descricao: 'Lanche maravilhoso'}, 
-      {id: 10, nome: 'Suco', img: img6, valor: 'R$ 17,00', descricao: 'Lanche maravilhoso'}, 
-      {id: 11, nome: 'Suco', img: img6, valor: 'R$ 18,00', descricao: 'Lanche maravilhoso'}, 
-      {id: 12, nome: 'Suco', img: img6, valor: 'R$ 19,00', descricao: 'Lanche maravilhoso'}, 
-    ]
-  );
-  const numColumns = 3;
+  const [produtos, setProdutos] = useState([]);
+  const [total, setTotal] = useState(0);
+  const [page, setPage] = useState(1); 
+  const limit = 9;
+  const [loading, setLoading] = useState(false);
+
+  async function listaProdutos() { 
+    try {
+        //const response = await api.get('/produtos?page=' + page + '&limit=9'); 
+        const response = await api.get('produtos', {
+          params: { page, limit }
+        });
+        setProdutos(response.data.message); 
+    } catch (err) {
+        setProdutos([]); 
+        console.log('Erro: ' + err);
+    }   
+  }
+
+  const numColumns = 3; 
+
+  useEffect(() => {
+    listaProdutos();    
+  }, []);  
+
   return (
     <View style={styles.container}>
       <View style={styles.pesquisa}>
@@ -77,7 +84,7 @@ export default function Produtos({ navigation }) {
         <FlatList 
           data={produtos} 
           renderItem={ ({item}) => <CardItem item={item} navigation={navigation} /> } 
-          keyExtractor={ item => item.id} 
+          keyExtractor={ item => item.prd_id} 
           numColumns={numColumns} 
           style={styles.flat}
         />

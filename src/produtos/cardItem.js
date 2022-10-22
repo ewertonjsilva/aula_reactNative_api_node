@@ -10,9 +10,9 @@ export default function CardItem({item, navigation}) {
         onPress={() => navigation.navigate('Produto', {item})}
       >
         {/*<View style={styles.itemPesquisa}>*/}
-          <Text style={styles.txtTituloProd}>{item.nome}</Text>
-          <Image style={styles.img} source={item.img} />
-          <Text>{item.valor}</Text>
+          <Text style={styles.txtTituloProd}>{item.prd_nome}</Text>
+          <Image style={styles.img} source={{uri: item.prd_img}} />
+          <Text>{item.prd_valor}</Text>
         {/*</View> */}           
       </TouchableOpacity>  
     );
