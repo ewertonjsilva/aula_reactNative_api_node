@@ -12,19 +12,18 @@ export default function Login({ navigation }) {
 
   const [login, setLogin] = useState('carlos@email.com');
   const [senha, setSenha] = useState('123456789');
-  const [logou, setLogou] = useState(false);
 
   async function verLogin() {  
     let logou = false;
     try {
-      //const response = await api.get('/produtos?page=' + page + '&limit=9'); 
       let dadosUsu = {
-        login, senha
+        login, 
+        senha
       };
       
       const response = await api.post('usuarios/login', dadosUsu);
       logou = response.data.confirma; 
-
+      // console.log(response.data.nome);
     } catch (err) {
         console.log('Erro: ' + err);
     }
