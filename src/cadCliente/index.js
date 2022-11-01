@@ -7,10 +7,10 @@ import styles from './styles';
 import Logo from '../../assets/compartilhados/logo';
 
 const estados = [
-  {id : 0, uf : 'UF'}, 
-  {id : 1, uf : 'RJ'}, 
-  {id : 2, uf : 'PR'}, 
-  {id : 3, uf : 'SP'}
+  {id : 1, uf : 'UF'}, 
+  {id : 2, uf : 'RJ'}, 
+  {id : 3, uf : 'PR'}, 
+  {id : 4, uf : 'SP'}
 ];
 
 const cidades = [

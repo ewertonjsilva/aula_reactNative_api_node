@@ -10,8 +10,8 @@ import Logo from '../../assets/compartilhados/logo';
 
 export default function Login({ navigation }) {
 
-  const [login, setLogin] = useState('carlos@email.com');
-  const [senha, setSenha] = useState('123456789');
+  const [login, setLogin] = useState('');
+  const [senha, setSenha] = useState('');
 
   async function verLogin() {  
     let logou = false;
@@ -40,8 +40,19 @@ export default function Login({ navigation }) {
     <View style={styles.container}>
       <Logo />
       <Text style={styles.text}>Login</Text> 
-      <TextInput style={styles.input} placeholder= 'usuário'/>
-      <TextInput style={styles.input} placeholder= 'senha'/>
+      <TextInput 
+        style = {styles.input} 
+        placeholder = 'usuário' 
+        onChangeText = { (us) => setLogin(us)} 
+        value = {'carlos@email.com'} // só para adiantar o login
+      />
+      <TextInput 
+        style={styles.input} 
+        placeholder = 'senha' 
+        onChangeText = { (sn) => setSenha(sn)} 
+        secureTextEntry = {true} 
+        value = {'123456789'} // só para adiantar o login
+      />
       <TouchableOpacity style={styles.btnCadUsu} onPress={() => navigation.navigate('CadastroUsu')}>
         <Text style={styles.txtCadUsu}>Cadastrar usuário</Text>
       </TouchableOpacity>
