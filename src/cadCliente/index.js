@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Text, View, TouchableOpacity, TextInput } from 'react-native';
 import { Picker } from '@react-native-picker/picker';
 
@@ -7,12 +7,12 @@ import api from '../services/api';
 
 import Logo from '../../assets/compartilhados/logo';
 
-const estados = [
-  {id : 1, uf : 'UF'}, 
-  {id : 2, uf : 'RJ'}, 
-  {id : 3, uf : 'PR'}, 
-  {id : 4, uf : 'SP'}
-];
+// const estados = [
+//   {id : 1, uf : 'UF'}, 
+//   {id : 2, uf : 'RJ'}, 
+//   {id : 3, uf : 'PR'}, 
+//   {id : 4, uf : 'SP'}
+// ];
 
 const cidades = [
     {id : 0, nome : 'Cidade'}, 
@@ -25,23 +25,25 @@ const cidades = [
 export default function Cliente({ navigation }) {
   // 0 - cadastro, 1 - sucesso, 2 - erro
   const [exibe, setExibe] = useState(0); 
+  const [estados, setEstados] = useState([]); 
 
-  // async function listaEstados() { 
-  //   try {
-  //       //const response = await api.get('/produtos?page=' + page + '&limit=9'); 
-  //       const response = await api.get('produtos', {
-  //         params: { page, limit }
-  //       });
-  //       setProdutos(response.data.message); 
-  //   } catch (err) {
-  //       setProdutos([]); 
-  //       console.log('Erro: ' + err);
-  //   }   
-  // }
+  async function listarEstados() { 
+    try {
+        const response = await api.get('estados');
+        setEstados(response.data.message); 
+    } catch (err) {
+        setEstados([]); 
+        console.log('Erro: ' + err);
+    }   
+  }
 
   const mudaTela = (tela) => {
     setExibe(tela); 
-  }
+  } 
+
+  useEffect(() => {
+    listarEstados();    
+  }, []);
 
   return (
     <View style={styles.container}>
@@ -49,7 +51,7 @@ export default function Cliente({ navigation }) {
       {
         exibe === 0 
         ? 
-          <Cadastro mudaTela={mudaTela} /> 
+          <Cadastro mudaTela={mudaTela} estados={estados} /> 
         : 
           exibe === 1 
         ? 
@@ -61,7 +63,7 @@ export default function Cliente({ navigation }) {
   );
 }
 
-function Cadastro({ mudaTela }) { 
+function Cadastro({ mudaTela, estados }) { 
 
   const [ufSel, setUfSel] = useState([]);
   const [cidSel, setCidSel] = useState([]); 
@@ -99,7 +101,7 @@ function Cadastro({ mudaTela }) {
           >
           {
             estados.map(uf => {
-              return <Picker.Item label={uf.uf} value={uf.id} key={uf.id} style={styles.txtLista} />
+              return <Picker.Item label={uf.cid_uf} value={uf.cid_uf} key={uf.cid_uf} style={styles.txtLista} />
             })
           }          
         </Picker>
