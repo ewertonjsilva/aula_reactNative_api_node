@@ -14,13 +14,13 @@ import Logo from '../../assets/compartilhados/logo';
 //   {id : 4, uf : 'SP'}
 // ];
 
-const cidades = [
-    {id : 0, nome : 'Cidade'}, 
-    {id : 1, nome : 'Tupã'}, 
-    {id : 2, nome : 'Parapuã'}, 
-    {id : 3, nome : 'Marília'}, 
-    {id : 4, nome : 'Paulicéia'}
-  ];
+// const cidades = [
+//     {id : 0, nome : 'Cidade'}, 
+//     {id : 1, nome : 'Tupã'}, 
+//     {id : 2, nome : 'Parapuã'}, 
+//     {id : 3, nome : 'Marília'}, 
+//     {id : 4, nome : 'Paulicéia'}
+//   ];
 
 export default function Cliente({ navigation }) {
   // 0 - cadastro, 1 - sucesso, 2 - erro
@@ -65,6 +65,8 @@ export default function Cliente({ navigation }) {
 
 function Cadastro({ mudaTela, estados }) { 
 
+  const [cidades, setCidades] = useState([]);
+
   const [ufSel, setUfSel] = useState([]);
   const [cidSel, setCidSel] = useState([]); 
 
@@ -79,6 +81,23 @@ function Cadastro({ mudaTela, estados }) {
   const [num, setNum] = useState(''); 
   const [bairro, setBairro] = useState(''); 
   const [compl, setCompl] = useState(''); 
+  
+  async function defineEstado(est) {
+    const dados = {
+      cidade : '%%', 
+      estado : est
+    }
+    try {
+      const response = await api.post('cidades', dados);
+      setCidades(response.data.message); 
+      // console.log(cidades);
+    } catch (err) {
+        setCidades([]); 
+        console.log('Erro: ' + err);
+    } finally {
+      setUfSel(est);
+    }
+  }
 
   return(
     <View style={styles.container}>
@@ -96,7 +115,7 @@ function Cadastro({ mudaTela, estados }) {
       <View style={styles.containerPicker}>
         <Picker
             selectedValue={ufSel} 
-            onValueChange={(itemValue) => setUfSel(itemValue)} 
+            onValueChange={(itemValue) => defineEstado(itemValue)} 
             style={styles.pickerUf}
           >
           {
@@ -112,7 +131,7 @@ function Cadastro({ mudaTela, estados }) {
           >
           {
             cidades.map(cid => {
-              return <Picker.Item label={cid.nome} value={cid.id} key={cid.id} style={styles.txtLista} />
+              return <Picker.Item label={cid.cid_nome} value={cid.cid_id} key={cid.cid_id} style={styles.txtLista} />
             })
           }          
         </Picker>
