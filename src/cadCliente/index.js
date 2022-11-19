@@ -26,6 +26,7 @@ export default function Cliente({ navigation }) {
   // 0 - cadastro, 1 - sucesso, 2 - erro
   const [exibe, setExibe] = useState(0); 
   const [estados, setEstados] = useState([]); 
+  const [mensagem, setMensagem] = useState([]); 
 
   async function listarEstados() { 
     try {
@@ -43,7 +44,11 @@ export default function Cliente({ navigation }) {
 
   useEffect(() => {
     listarEstados();    
-  }, []);
+  }, []); 
+
+  function montaMensagem(arr) {
+    setMensagem(arr); 
+  }
 
   return (
     <View style={styles.container}>
@@ -51,27 +56,27 @@ export default function Cliente({ navigation }) {
       {
         exibe === 0 
         ? 
-          <Cadastro mudaTela={mudaTela} estados={estados} /> 
+          <Cadastro mudaTela={mudaTela} estados={estados} montaMensagem={montaMensagem} /> 
         : 
           exibe === 1 
         ? 
-          <CadSucesso navigation={navigation} /> 
+          <CadSucesso navigation={navigation} montaMensagem={montaMensagem}/> 
         : 
-          <CadErro mudaTela={mudaTela} />
+          <CadErro mudaTela={mudaTela} mensagem={mensagem} />
       }
     </View>
   );
 }
 
-function Cadastro({ mudaTela, estados }) { 
+function Cadastro({ mudaTela, estados, montaMensagem }) { 
 
   const [cidades, setCidades] = useState([]);
 
   const [ufSel, setUfSel] = useState([]);
-  const [cidSel, setCidSel] = useState([]); 
+  const [cidade, setCidade] = useState([]); 
 
-  const usu_tipo = 2; // Tipo de usuário cliente
-  const cli_pts = 0; // Sem pontuação ao cadastrar
+  const tipo = 2; // Tipo de usuário cliente
+  const pts = 0; // Sem pontuação ao cadastrar
 
   const [nome, setNome] = useState(''); 
   const [email, setEmail] = useState(''); 
@@ -97,6 +102,89 @@ function Cadastro({ mudaTela, estados }) {
     } finally {
       setUfSel(est);
     }
+  } 
+
+  function validaCad() {
+    let valida = true; 
+    let mens = ['Corrija os campos: ']; 
+
+    if (nome === '') { 
+      valida = false;
+      mens.push('Insira o nome'); 
+    } 
+
+    if (email === '') {
+      valida = false;
+      mens.push('Insira o e-mail');      
+    } else {
+      // let vEmail = checkEmail(email);
+      if (!checkEmail(email)) {
+        valida = false;
+        mens.push('Insira um e-mail válido'); 
+      }
+    }    
+    
+    if (celular === '') { 
+      valida = false;
+      mens.push('Insira o número do celular'); 
+    } 
+    
+    if (logradouro === '') { 
+      valida = false;
+      mens.push('Insira o logradouro'); 
+    } 
+
+    if (num === '') { 
+      valida = false;
+      mens.push('Insira o número do endereço'); 
+    } 
+
+    if (bairro === '') { 
+      valida = false;
+      mens.push('Insira o bairro'); 
+    } 
+
+    if (senha === '') { 
+      valida = false;
+      mens.push('Insira a senha'); 
+    } else {
+      if (senha.length < 4) {
+        valida = false;
+        mens.push('A senha precisa ter mais que 4 caracteres');        
+      }
+    }
+
+    if (valida === false) {
+      montaMensagem(mens);
+      mudaTela(2);
+    } else {
+      const usu = CadastraUsu();
+      montaMensagem(usu.id);
+      mudaTela(1);
+    }
+  }
+
+  function checkEmail(email) {
+    return /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/.test(
+      email
+    );
+  }
+
+  async function CadastraUsu() {
+    let confirmaCad = {};
+    const dados = {
+      nome, email, senha, tipo, pts, cidade, celular, logradouro, num, bairro, compl
+    }
+    try {
+      const response = await api.post('clientes', dados);
+      confirmaCad = response.data.message; 
+      // console.log(cidades);
+    } catch (err) {        
+        console.log('Erro: ' + err); 
+        confirmaCad = {id: 0}
+    } finally {
+      return confirmaCad;
+    }    
   }
 
   return(
@@ -125,8 +213,8 @@ function Cadastro({ mudaTela, estados }) {
           }          
         </Picker>
         <Picker
-            selectedValue={cidSel} 
-            onValueChange={(itemValue) => setCidSel(itemValue)} 
+            selectedValue={cidade} 
+            onValueChange={(itemValue) => setCidade(itemValue)} 
             style={styles.pickerCid}
           >
           {
@@ -137,17 +225,18 @@ function Cadastro({ mudaTela, estados }) {
         </Picker>
       </View>      
 
-      <TouchableOpacity onPress={() => mudaTela(1)} style={styles.botao}>
+      <TouchableOpacity onPress={() => validaCad()} style={styles.botao}>
         <Text style={styles.txtBotao}>Cadastrar</Text>        
       </TouchableOpacity>
     </View>    
   )
 }
 
-function CadSucesso({ navigation }) {
+function CadSucesso({ navigation, mensagem }) {
   return(
     <View style={styles.container}>
       <Text style={styles.txtMensagem}>Cadastro realizado com sucesso!</Text>
+      <Text>{mensagem}</Text>
       <TouchableOpacity onPress={() => navigation.goBack()} style={styles.botao}>
         <Text style={styles.txtBotao}>Voltar para o login</Text>        
       </TouchableOpacity>
@@ -155,11 +244,16 @@ function CadSucesso({ navigation }) {
   )
 }
 
-function CadErro({ mudaTela }) {
+function CadErro({ mudaTela, mensagem }) {
   return(
     <View style={styles.container}>
-      <TouchableOpacity onPress={() => mudaTela(0)}>
-        <Text>Erro ao cadastrar...</Text>
+      <Text>Erro ao cadastrar...</Text>
+      {
+        mensagem.map(mens => {
+          return <Text>{mens}</Text>
+        })
+      }
+      <TouchableOpacity onPress={() => mudaTela(0)}>        
         <Text>Tentar novamente!</Text>
       </TouchableOpacity>
     </View>    
