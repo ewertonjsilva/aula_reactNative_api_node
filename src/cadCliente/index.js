@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Text, View, TouchableOpacity, TextInput } from 'react-native';
+import { Text, View, TouchableOpacity, TextInput, KeyboardAvoidingView } from 'react-native';
 import { Picker } from '@react-native-picker/picker';
 
 import styles from './styles';
@@ -28,10 +28,13 @@ export default function Cliente({ navigation }) {
   const [estados, setEstados] = useState([]); 
   const [mensagem, setMensagem] = useState([]); 
 
+  const listUf = [{cid_uf: 'UF'}];
+
   async function listarEstados() { 
     try {
         const response = await api.get('estados');
-        setEstados(response.data.message); 
+        const arr = listUf.concat(response.data.message);
+        setEstados(arr); 
     } catch (err) {
         setEstados([]); 
         console.log('Erro: ' + err);
@@ -87,15 +90,18 @@ function Cadastro({ mudaTela, estados, montaMensagem }) {
   const [bairro, setBairro] = useState(''); 
   const [compl, setCompl] = useState(''); 
   
+  const listCid = [{cid_id: 0, cid_nome: 'Selecione a cidade', cid_uf: '-'}];
+
   async function defineEstado(est) {
     const dados = {
       cidade : '%%', 
       estado : est
     }
     try {
-      const response = await api.post('cidades', dados);
-      setCidades(response.data.message); 
-      // console.log(cidades);
+      const response = await api.post('cidades', dados); 
+      const arr = listCid.concat(response.data.message);
+      setCidades(arr); 
+      // console.log(response.data.message);
     } catch (err) {
         setCidades([]); 
         console.log('Erro: ' + err);
@@ -154,12 +160,15 @@ function Cadastro({ mudaTela, estados, montaMensagem }) {
       }
     }
 
+    if (cidade === 0) {
+      valida = false;
+      mens.push('Selecione a cidade');       
+    }
+
     if (valida === false) {
       montaMensagem(mens);
       mudaTela(2);
     } else {
-      const usu = CadastraUsu();
-      montaMensagem(usu.id);
       mudaTela(1);
     }
   }
@@ -177,13 +186,11 @@ function Cadastro({ mudaTela, estados, montaMensagem }) {
     }
     try {
       const response = await api.post('clientes', dados);
-      confirmaCad = response.data.message; 
-      // console.log(cidades);
+      confirmaCad = response.data.message;       
+      montaMensagem(confirmaCad.id);
     } catch (err) {        
         console.log('Erro: ' + err); 
-        confirmaCad = {id: 0}
-    } finally {
-      return confirmaCad;
+        confirmaCad = 0;
     }    
   }
 
@@ -236,7 +243,7 @@ function CadSucesso({ navigation, mensagem }) {
   return(
     <View style={styles.container}>
       <Text style={styles.txtMensagem}>Cadastro realizado com sucesso!</Text>
-      <Text>{mensagem}</Text>
+      <Text style={{color: '#000'}}>{mensagem}</Text>
       <TouchableOpacity onPress={() => navigation.goBack()} style={styles.botao}>
         <Text style={styles.txtBotao}>Voltar para o login</Text>        
       </TouchableOpacity>
@@ -247,14 +254,15 @@ function CadSucesso({ navigation, mensagem }) {
 function CadErro({ mudaTela, mensagem }) {
   return(
     <View style={styles.container}>
-      <Text>Erro ao cadastrar...</Text>
+      <Text style={styles.text}>Erro ao cadastrar...</Text>
       {
-        mensagem.map(mens => {
-          return <Text>{mens}</Text>
+        mensagem.map((mens, n) => {
+          if (n === 0) return <Text style={[styles.erros, styles.ttErros]} key={mens}>{mens}</Text>
+          return <Text style={styles.erros} key={mens}>{mens}</Text>
         })
       }
-      <TouchableOpacity onPress={() => mudaTela(0)}>        
-        <Text>Tentar novamente!</Text>
+      <TouchableOpacity style={styles.botao} onPress={() => mudaTela(0)}>        
+        <Text style={styles.txtBotao}>Tentar novamente!</Text>
       </TouchableOpacity>
     </View>    
   )

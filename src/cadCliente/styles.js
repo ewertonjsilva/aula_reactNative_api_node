@@ -70,6 +70,14 @@ const styles = StyleSheet.create({
     txtMensagem: {
         fontSize: RFPercentage(3), 
         marginVertical: RFValue(200),
+    }, 
+    erros: {
+        fontSize: 18, 
+        width: '100%', 
+        paddingLeft: 10
+    }, 
+    ttErros: {
+        fontWeight: 'bold'
     }
 });
 
