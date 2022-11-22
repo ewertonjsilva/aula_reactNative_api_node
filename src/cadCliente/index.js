@@ -81,13 +81,13 @@ function Cadastro({ mudaTela, estados, montaMensagem }) {
   const tipo = 2; // Tipo de usuário cliente
   const pts = 0; // Sem pontuação ao cadastrar
 
-  const [nome, setNome] = useState(''); 
-  const [email, setEmail] = useState(''); 
-  const [senha, setSenha] = useState(''); 
-  const [celular, setCelular] = useState(''); 
-  const [logradouro, setLogradouro] = useState(''); 
-  const [num, setNum] = useState(''); 
-  const [bairro, setBairro] = useState(''); 
+  const [nome, setNome] = useState('Testando'); 
+  const [email, setEmail] = useState('testando@email.com'); 
+  const [senha, setSenha] = useState('1234'); 
+  const [celular, setCelular] = useState('14999999999'); 
+  const [logradouro, setLogradouro] = useState('Rua Brasil'); 
+  const [num, setNum] = useState('10'); 
+  const [bairro, setBairro] = useState('Centro'); 
   const [compl, setCompl] = useState(''); 
   
   const listCid = [{cid_id: 0, cid_nome: 'Selecione a cidade', cid_uf: '-'}];
@@ -110,7 +110,7 @@ function Cadastro({ mudaTela, estados, montaMensagem }) {
     }
   } 
 
-  function validaCad() {
+  async function validaCad() {
     let valida = true; 
     let mens = ['Corrija os campos: ']; 
 
@@ -169,6 +169,10 @@ function Cadastro({ mudaTela, estados, montaMensagem }) {
       montaMensagem(mens);
       mudaTela(2);
     } else {
+      const [data, error] = await CadastraUsu(); 
+      console.log('após validação');
+      console.log(data);
+      montaMensagem(data);
       mudaTela(1);
     }
   }
@@ -180,14 +184,16 @@ function Cadastro({ mudaTela, estados, montaMensagem }) {
   }
 
   async function CadastraUsu() {
-    let confirmaCad = {};
-    const dados = {
-      nome, email, senha, tipo, pts, cidade, celular, logradouro, num, bairro, compl
-    }
     try {
+      let confirmaCad = {};
+      const dados = {
+        nome, email, senha, tipo, pts, cidade, celular, logradouro, num, bairro, compl
+      }
       const response = await api.post('clientes', dados);
       confirmaCad = response.data.message;       
-      montaMensagem(confirmaCad.id);
+      console.log('dentro try cadUsu');
+      console.log(confirmaCad.id);
+      return [confirmaCad.id, null];
     } catch (err) {        
         console.log('Erro: ' + err); 
         confirmaCad = 0;
@@ -239,7 +245,13 @@ function Cadastro({ mudaTela, estados, montaMensagem }) {
   )
 }
 
-function CadSucesso({ navigation, mensagem }) {
+function CadSucesso({ navigation, mensagem }) { 
+  
+  
+  // const [data, error] = mensagem; 
+  console.log('mensagem');
+  console.log(mensagem);
+
   return(
     <View style={styles.container}>
       <Text style={styles.txtMensagem}>Cadastro realizado com sucesso!</Text>
