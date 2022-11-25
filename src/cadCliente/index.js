@@ -63,7 +63,7 @@ export default function Cliente({ navigation }) {
         : 
           exibe === 1 
         ? 
-          <CadSucesso navigation={navigation} montaMensagem={montaMensagem}/> 
+          <CadSucesso navigation={navigation} montaMensagem={montaMensagem} mensagem={mensagem} /> 
         : 
           <CadErro mudaTela={mudaTela} mensagem={mensagem} />
       }
@@ -90,6 +90,7 @@ function Cadastro({ mudaTela, estados, montaMensagem }) {
   const [bairro, setBairro] = useState('Centro'); 
   const [compl, setCompl] = useState(''); 
   
+
   const listCid = [{cid_id: 0, cid_nome: 'Selecione a cidade', cid_uf: '-'}];
 
   async function defineEstado(est) {
@@ -110,7 +111,7 @@ function Cadastro({ mudaTela, estados, montaMensagem }) {
     }
   } 
 
-  async function validaCad() {
+  function validaCad() {
     let valida = true; 
     let mens = ['Corrija os campos: ']; 
 
@@ -160,20 +161,17 @@ function Cadastro({ mudaTela, estados, montaMensagem }) {
       }
     }
 
-    if (cidade === 0) {
+    if (cidade == 0) {
       valida = false;
       mens.push('Selecione a cidade');       
     }
 
-    if (valida === false) {
+    if (valida === true) {
+      CadastraUsu();
+      mudaTela(1);
+    } else {
       montaMensagem(mens);
       mudaTela(2);
-    } else {
-      const [data, error] = await CadastraUsu(); 
-      console.log('após validação');
-      console.log(data);
-      montaMensagem(data);
-      mudaTela(1);
     }
   }
 
@@ -191,9 +189,8 @@ function Cadastro({ mudaTela, estados, montaMensagem }) {
       }
       const response = await api.post('clientes', dados);
       confirmaCad = response.data.message;       
-      console.log('dentro try cadUsu');
-      console.log(confirmaCad.id);
-      return [confirmaCad.id, null];
+      const idUsu = confirmaCad.id;      
+      montaMensagem(idUsu);
     } catch (err) {        
         console.log('Erro: ' + err); 
         confirmaCad = 0;
@@ -246,16 +243,10 @@ function Cadastro({ mudaTela, estados, montaMensagem }) {
 }
 
 function CadSucesso({ navigation, mensagem }) { 
-  
-  
-  // const [data, error] = mensagem; 
-  console.log('mensagem');
-  console.log(mensagem);
-
   return(
     <View style={styles.container}>
       <Text style={styles.txtMensagem}>Cadastro realizado com sucesso!</Text>
-      <Text style={{color: '#000'}}>{mensagem}</Text>
+      <Text style={{color: '#000'}}>{'Id do usuário: ' + mensagem}</Text>
       <TouchableOpacity onPress={() => navigation.goBack()} style={styles.botao}>
         <Text style={styles.txtBotao}>Voltar para o login</Text>        
       </TouchableOpacity>
