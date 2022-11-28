@@ -48,6 +48,18 @@ export default function Produtos({ navigation }) {
         const response = await api.get('produtos', {
           params: { page, limit }
         });
+
+        /*
+          se tivesse que passar parâmetros via body o método seria post e eles devem ser passados antes do params
+          ex:
+          const pequisa = {
+            tipo: 2, 
+            nome: 'abc'
+          }
+          const response = await api.get('produtos', pesquisa, {
+            params: { page, limit }
+        });
+        */
         setProdutos(response.data.message); 
     } catch (err) {
         setProdutos([]); 
